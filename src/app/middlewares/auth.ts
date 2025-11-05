@@ -6,7 +6,11 @@ import ApiError from "../errors/ApiError";
 import { jwtHelpers } from "../helpers/jwtHelpers";
 
 const auth = (...roles: string[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (
+    req: Request & { user?: any },
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const token = req.headers.authorization;
       console.log("token", token);
@@ -19,6 +23,7 @@ const auth = (...roles: string[]) => {
         token,
         config.jwt.jwt_secret as Secret
       );
+      req.user = verifiedUser;
       console.log("verify", verifiedUser);
 
       if (roles.length && !roles.includes(verifiedUser.role)) {
