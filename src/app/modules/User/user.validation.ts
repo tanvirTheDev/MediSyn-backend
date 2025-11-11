@@ -24,7 +24,9 @@ export const createDoctor = z.object({
   gender: z.enum(["MALE", "FEMALE", "OTHER"], {
     message: "Gender is required",
   }),
-  appointmentsFee: z.number({ message: "Appointments fee is required" }),
+  appointmentFee: z
+    .number({ message: "Appointments fee is required" })
+    .optional(),
   qualification: z.string().min(1, "Qualification is required"),
   currentWorkingPlace: z.string().min(1, "Current working place is required"),
   designation: z.string().min(1, "Designation is required"),

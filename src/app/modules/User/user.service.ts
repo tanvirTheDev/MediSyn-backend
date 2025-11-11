@@ -7,6 +7,7 @@ import {
   calculatePagination,
   IPaginationOptions,
 } from "../../helpers/paginationHelpers";
+import { IAuthUser } from "../../Interface/common";
 import { UserSearchableField } from "./user.constant";
 import { CreatePatientInput } from "./user.interface";
 
@@ -230,10 +231,85 @@ const changeProfileStatus = async (id: string, status: UserRole) => {
   return updateUserStatus;
 };
 
+const getMyProfile = async (payload: any) => {
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: payload.email,
+    },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+      needPasswordChange: true,
+      status: true,
+    },
+  });
+
+  let profileInfo;
+  if (userData.role === UserRole.ADMIN) {
+    profileInfo = await prisma.admin.findUnique({
+      where: {
+        email: userData.email,
+      },
+    });
+  } else if (userData.role === UserRole.DOCTOR) {
+    profileInfo = await prisma.doctor.findUnique({
+      where: {
+        email: userData.email,
+      },
+    });
+  }
+  if (userData.role === UserRole.PATIENT) {
+    profileInfo = await prisma.patient.findUnique({
+      where: {
+        email: userData.email,
+      },
+    });
+  }
+  return { ...userData, ...profileInfo };
+};
+
+const updateMyProfile = async (user: IAuthUser, payload: any) => {
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: user?.email,
+      // status: UserStatus.ACTIVE,
+    },
+  });
+
+  let profileInfo;
+  if (userData.role === UserRole.ADMIN) {
+    profileInfo = await prisma.admin.update({
+      where: {
+        email: userData.email,
+      },
+      data: payload,
+    });
+  } else if (userData.role === UserRole.DOCTOR) {
+    profileInfo = await prisma.doctor.update({
+      where: {
+        email: userData.email,
+      },
+      data: payload,
+    });
+  }
+  if (userData.role === UserRole.PATIENT) {
+    profileInfo = await prisma.patient.update({
+      where: {
+        email: userData.email,
+      },
+      data: payload,
+    });
+  }
+  return profileInfo;
+};
+
 export const UserService = {
   createAdmin,
   createDoctor,
   createPatient,
   getAllUsers,
   changeProfileStatus,
+  getMyProfile,
+  updateMyProfile,
 };

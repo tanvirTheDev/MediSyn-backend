@@ -16,10 +16,16 @@ export const sendResponse = <T>(
   res: Response,
   jsonData: TJsonData<T>
 ): void => {
-  res.status(jsonData.statusCode).json({
+  const response: Record<string, any> = {
     success: jsonData.success,
     message: jsonData.message,
-    meta: jsonData.meta || null,
-    data: jsonData.data || null,
-  });
+    data: jsonData.data ?? null,
+  };
+
+  // ✅ Only include meta if provided
+  if (jsonData.meta) {
+    response.meta = jsonData.meta;
+  }
+
+  res.status(jsonData.statusCode).json(response);
 };

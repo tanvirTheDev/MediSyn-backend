@@ -116,8 +116,21 @@ router.post(
 
 router.patch(
   "/:id/status",
-  // auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   UserController.changeProfileStatus
+);
+
+router.get(
+  "/me",
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PATIENT, UserRole.DOCTOR),
+  UserController.getMyProfile
+);
+
+router.patch(
+  "/update-my-profile",
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PATIENT, UserRole.DOCTOR),
+  fileUploader.upload.single("profilePhoto"),
+  UserController.updateMyProfile
 );
 
 export const UserRoutes: Router = router;

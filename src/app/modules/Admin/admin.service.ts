@@ -91,11 +91,11 @@ const updateFromDB = async (
   id: string,
   data: Partial<Admin>
 ): Promise<Admin> => {
-  // await prisma.admin.findUniqueOrThrow({
-  //   where: {
-  //     id,
-  //   },
-  // });
+  await prisma.admin.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
   const result = await prisma.admin.update({
     where: {
       id,
