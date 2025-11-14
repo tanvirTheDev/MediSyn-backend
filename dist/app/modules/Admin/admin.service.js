@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminService = void 0;
-const prisma_1 = require("../../../../generated/prisma");
-const prisma_2 = __importDefault(require("../../../shared/prisma"));
+const client_1 = require("@prisma/client");
+const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelpers_1 = require("../../helpers/paginationHelpers");
 const admin_constant_1 = require("./admin.constant");
 const getAdmins = async (params, options) => {
@@ -44,13 +44,13 @@ const getAdmins = async (params, options) => {
         [sortBy]: sortOrder,
     };
     // console.log("WHERE CONDITION =>", JSON.stringify(whereConditions, null, 2));
-    const result = await prisma_2.default.admin.findMany({
+    const result = await prisma_1.default.admin.findMany({
         where: whereConditions,
         skip,
         take: limit,
         orderBy,
     });
-    const total = await prisma_2.default.admin.count({
+    const total = await prisma_1.default.admin.count({
         where: whereConditions,
     });
     return {
@@ -64,7 +64,7 @@ const getAdmins = async (params, options) => {
 };
 const getByIDFromDB = async (id) => {
     console.log(id);
-    const result = await prisma_2.default.admin.findUnique({
+    const result = await prisma_1.default.admin.findUnique({
         where: {
             id,
             isDeleted: false,
@@ -74,12 +74,12 @@ const getByIDFromDB = async (id) => {
     return result;
 };
 const updateFromDB = async (id, data) => {
-    await prisma_2.default.admin.findUniqueOrThrow({
+    await prisma_1.default.admin.findUniqueOrThrow({
         where: {
             id,
         },
     });
-    const result = await prisma_2.default.admin.update({
+    const result = await prisma_1.default.admin.update({
         where: {
             id,
             isDeleted: false,
@@ -89,12 +89,12 @@ const updateFromDB = async (id, data) => {
     return result;
 };
 const deleteFromDB = async (id) => {
-    await prisma_2.default.admin.findFirstOrThrow({
+    await prisma_1.default.admin.findFirstOrThrow({
         where: {
             id,
         },
     });
-    const result = await prisma_2.default.$transaction(async (tx) => {
+    const result = await prisma_1.default.$transaction(async (tx) => {
         const adminDataDelete = tx.admin.delete({
             where: {
                 id,
@@ -115,7 +115,7 @@ const softDeleteFromDB = async (id) => {
     //     id,
     //   },
     // });
-    const result = await prisma_2.default.$transaction(async (tx) => {
+    const result = await prisma_1.default.$transaction(async (tx) => {
         const adminDataDelete = tx.admin.update({
             where: {
                 id,
@@ -129,7 +129,7 @@ const softDeleteFromDB = async (id) => {
                 email: (await adminDataDelete).email,
             },
             data: {
-                status: prisma_1.UserStatus.DELETED,
+                status: client_1.UserStatus.DELETED,
             },
         });
         return adminDataDelete;

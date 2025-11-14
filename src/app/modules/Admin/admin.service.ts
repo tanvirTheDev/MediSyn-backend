@@ -1,4 +1,4 @@
-import { Admin, Prisma, UserStatus } from "../../../../generated/prisma";
+import { Admin, Prisma, UserStatus } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import {
   calculatePagination,

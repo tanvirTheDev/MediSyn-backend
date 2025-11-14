@@ -1,6 +1,6 @@
+import { UserStatus } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { Secret } from "jsonwebtoken";
-import { UserStatus } from "../../../../generated/prisma";
 import config from "../../../config";
 import prisma from "../../../shared/prisma";
 import { jwtHelpers } from "../../helpers/jwtHelpers";

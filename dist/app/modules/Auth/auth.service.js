@@ -4,18 +4,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthServices = void 0;
+const client_1 = require("@prisma/client");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const prisma_1 = require("../../../../generated/prisma");
 const config_1 = __importDefault(require("../../../config"));
-const prisma_2 = __importDefault(require("../../../shared/prisma"));
+const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const jwtHelpers_1 = require("../../helpers/jwtHelpers");
 const emailSender_1 = __importDefault(require("./emailSender"));
 const loginUser = async (payload) => {
     console.log("logged in", payload);
-    const userData = await prisma_2.default.user.findUniqueOrThrow({
+    const userData = await prisma_1.default.user.findUniqueOrThrow({
         where: {
             email: payload.email,
-            status: prisma_1.UserStatus.ACTIVE,
+            status: client_1.UserStatus.ACTIVE,
         },
     });
     const isPasswordValid = await bcrypt_1.default.compare(payload.password, userData.password);
@@ -50,10 +50,10 @@ const refreshToken = async (token) => {
     catch (error) {
         throw new Error("Invalid refresh token");
     }
-    const userData = await prisma_2.default.user.findUniqueOrThrow({
+    const userData = await prisma_1.default.user.findUniqueOrThrow({
         where: {
             email: decodeData.email,
-            status: prisma_1.UserStatus.ACTIVE,
+            status: client_1.UserStatus.ACTIVE,
         },
     });
     const accessToken = jwtHelpers_1.jwtHelpers.generateToken({
@@ -66,10 +66,10 @@ const refreshToken = async (token) => {
     };
 };
 const changePassword = async (user, payload) => {
-    const userData = await prisma_2.default.user.findUniqueOrThrow({
+    const userData = await prisma_1.default.user.findUniqueOrThrow({
         where: {
             email: user.email,
-            status: prisma_1.UserStatus.ACTIVE,
+            status: client_1.UserStatus.ACTIVE,
         },
     });
     const isPasswordValid = await bcrypt_1.default.compare(payload.oldPassword, userData.password);
@@ -78,7 +78,7 @@ const changePassword = async (user, payload) => {
         throw new Error("Invalid password");
     }
     const hashedPassword = await bcrypt_1.default.hash(payload.newPassword, 12);
-    await prisma_2.default.user.update({
+    await prisma_1.default.user.update({
         where: {
             email: userData.email,
         },
@@ -93,10 +93,10 @@ const changePassword = async (user, payload) => {
 };
 const forgetPassword = async (payload) => {
     console.log(payload);
-    const userData = await prisma_2.default.user.findUniqueOrThrow({
+    const userData = await prisma_1.default.user.findUniqueOrThrow({
         where: {
             email: payload.email,
-            status: prisma_1.UserStatus.ACTIVE,
+            status: client_1.UserStatus.ACTIVE,
         },
     });
     const resetPassToken = jwtHelpers_1.jwtHelpers.generateToken({
@@ -120,16 +120,16 @@ const forgetPassword = async (payload) => {
 };
 const resetPassword = async (token, payload) => {
     console.log(payload);
-    const userData = await prisma_2.default.user.findUniqueOrThrow({
+    const userData = await prisma_1.default.user.findUniqueOrThrow({
         where: {
             id: payload.id,
-            status: prisma_1.UserStatus.ACTIVE,
+            status: client_1.UserStatus.ACTIVE,
         },
     });
     const isValidToken = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.reset_pass_secret);
     console.log("isvalidtoken", isValidToken);
     const hashedPassword = await bcrypt_1.default.hash(payload.newPassword, 12);
-    await prisma_2.default.user.update({
+    await prisma_1.default.user.update({
         where: {
             id: userData.id,
         },

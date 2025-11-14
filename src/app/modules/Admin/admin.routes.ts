@@ -1,5 +1,5 @@
+import { UserRole } from "@prisma/client";
 import express, { Router } from "express";
-import { UserRole } from "../../../../generated/prisma";
 import auth from "../../middlewares/auth";
 import validateRequest from "../../middlewares/validateRequest";
 import { AdminController } from "./admin.controller";

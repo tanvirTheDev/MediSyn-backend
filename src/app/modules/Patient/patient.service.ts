@@ -1,4 +1,4 @@
-import { Patient, Prisma, UserStatus } from "../../../../generated/prisma";
+import { Patient, Prisma, UserStatus } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import {
   calculatePagination,

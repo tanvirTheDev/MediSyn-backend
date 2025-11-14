@@ -1,6 +1,6 @@
 // user.routes.ts
+import { UserRole } from "@prisma/client";
 import express, { NextFunction, Request, Response, Router } from "express";
-import { UserRole } from "../../../../generated/prisma";
 import { fileUploader } from "../../helpers/fileUploader";
 import auth from "../../middlewares/auth";
 import { UserController } from "./user.controller";

@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DoctorRoutes = void 0;
 // user.routes.ts
+const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
-const prisma_1 = require("../../../../generated/prisma");
 const auth_1 = __importDefault(require("../../middlewares/auth"));
 const doctor_controller_1 = require("./doctor.controller");
 // import { UserController } from "./user.controller";
@@ -43,5 +43,5 @@ router.get("/",
 // auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
 doctor_controller_1.DoctorController.getAllDoctorFromDB);
 router.get("/:id", doctor_controller_1.DoctorController.getByIDFromDB);
-router.delete("/:id", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), doctor_controller_1.DoctorController.deleteFromDB);
+router.delete("/:id", (0, auth_1.default)(client_1.UserRole.SUPER_ADMIN, client_1.UserRole.ADMIN), doctor_controller_1.DoctorController.deleteFromDB);
 exports.DoctorRoutes = router;

@@ -1,4 +1,4 @@
-import { BloodGroup, Gender, MaritalStatus } from "../../../../generated/prisma";
+import { BloodGroup, Gender, MaritalStatus } from "@prisma/client";
 
 export type IPatientFilterRequest = {
   name?: string | undefined;
@@ -6,8 +6,6 @@ export type IPatientFilterRequest = {
   contactNumber?: string | undefined;
   searchTerm?: string | undefined;
 };
-
-
 
 export interface IPatientHealthDataInput {
   dateOfBirth: Date | string;

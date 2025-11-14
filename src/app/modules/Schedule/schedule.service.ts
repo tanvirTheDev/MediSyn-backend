@@ -1,5 +1,5 @@
+import { Prisma } from "@prisma/client";
 import { addHours, addMinutes, format } from "date-fns";
-import { Prisma } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 import {
   calculatePagination,

@@ -1,7 +1,7 @@
 // user.service.ts
+import { Patient, Prisma, UserRole } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
-import { Patient, Prisma, UserRole } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 import {
   calculatePagination,

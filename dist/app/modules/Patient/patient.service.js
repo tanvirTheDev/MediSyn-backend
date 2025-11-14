@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PatientService = void 0;
-const prisma_1 = require("../../../../generated/prisma");
-const prisma_2 = __importDefault(require("../../../shared/prisma"));
+const client_1 = require("@prisma/client");
+const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelpers_1 = require("../../helpers/paginationHelpers");
 const patient_constant_1 = require("./patient.constant");
 const getPatients = async (params, options) => {
@@ -44,7 +44,7 @@ const getPatients = async (params, options) => {
         [sortBy]: sortOrder,
     };
     // console.log("WHERE CONDITION =>", JSON.stringify(whereConditions, null, 2));
-    const result = await prisma_2.default.patient.findMany({
+    const result = await prisma_1.default.patient.findMany({
         where: whereConditions,
         skip,
         take: limit,
@@ -54,7 +54,7 @@ const getPatients = async (params, options) => {
             patientHealthData: true,
         },
     });
-    const total = await prisma_2.default.patient.count({
+    const total = await prisma_1.default.patient.count({
         where: whereConditions,
     });
     return {
@@ -68,7 +68,7 @@ const getPatients = async (params, options) => {
 };
 const getByIDFromDB = async (id) => {
     console.log(id);
-    const result = await prisma_2.default.patient.findUnique({
+    const result = await prisma_1.default.patient.findUnique({
         where: {
             id,
             //   isDeleted: false,
@@ -80,14 +80,14 @@ const getByIDFromDB = async (id) => {
 const updateFromDB = async (id, data) => {
     const { patientHelthData, medicalReport, ...patientData } = data;
     console.log(patientHelthData, medicalReport);
-    const patientInfo = await prisma_2.default.patient.findUniqueOrThrow({
+    const patientInfo = await prisma_1.default.patient.findUniqueOrThrow({
         where: {
             id,
         },
     });
-    const result = prisma_2.default.$transaction(async (tx) => {
+    const result = prisma_1.default.$transaction(async (tx) => {
         // update  patient data
-        const updatedPatient = await prisma_2.default.patient.update({
+        const updatedPatient = await prisma_1.default.patient.update({
             where: {
                 id,
                 //   isDeleted: false,
@@ -121,7 +121,7 @@ const updateFromDB = async (id, data) => {
                 },
             });
         }
-        const responseData = await prisma_2.default.patient.findUnique({
+        const responseData = await prisma_1.default.patient.findUnique({
             where: {
                 id: patientInfo.id,
             },
@@ -135,13 +135,13 @@ const updateFromDB = async (id, data) => {
     return result;
 };
 const deleteFromDB = async (id) => {
-    await prisma_2.default.patient.findUniqueOrThrow({
+    await prisma_1.default.patient.findUniqueOrThrow({
         where: {
             id,
             isDeleted: false,
         },
     });
-    const result = await prisma_2.default.$transaction(async (tx) => {
+    const result = await prisma_1.default.$transaction(async (tx) => {
         // delete medical report
         await tx.medicalReport.deleteMany({
             where: {
@@ -169,7 +169,7 @@ const deleteFromDB = async (id) => {
     return result;
 };
 const softDeleteFromDB = async (id) => {
-    const result = await prisma_2.default.$transaction(async (tx) => {
+    const result = await prisma_1.default.$transaction(async (tx) => {
         const deletedPatient = tx.patient.update({
             where: {
                 id,
@@ -183,7 +183,7 @@ const softDeleteFromDB = async (id) => {
                 email: (await deletedPatient).email,
             },
             data: {
-                status: prisma_1.UserStatus.DELETED,
+                status: client_1.UserStatus.DELETED,
             },
         });
         return deletedPatient;
