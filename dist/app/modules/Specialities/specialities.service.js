@@ -28,21 +28,43 @@ const createSpecialities = async (req) => {
     return result;
 };
 const getAllSpecialities = async () => {
-    console.log("get all specialities");
     const specialitiesData = prisma_1.default.specialities.findMany({});
     return specialitiesData;
 };
 const deleteSpecialitiesById = async (id) => {
     console.log("get all specialities");
-    const specialitiesData = prisma_1.default.specialities.delete({
+    await prisma_1.default.doctorSpecialities.deleteMany({
+        where: { specialitiesId: id },
+    });
+    const specialitiesData = await prisma_1.default.specialities.delete({
         where: {
             id,
         },
     });
     return specialitiesData;
 };
+const getDoctorsBySpecialityId = async (specialityId) => {
+    console.log(specialityId);
+    const specialityWithDoctors = await prisma_1.default.specialities.findUnique({
+        where: { id: specialityId },
+        include: {
+            doctorSpecialities: {
+                include: {
+                    doctor: true,
+                },
+            },
+        },
+    });
+    if (!specialityWithDoctors) {
+        throw new Error("Speciality not found");
+    }
+    // Flatten doctors array
+    const doctors = specialityWithDoctors.doctorSpecialities.map((ds) => ds.doctor);
+    return doctors;
+};
 exports.SpecialitiesService = {
     createSpecialities,
     getAllSpecialities,
     deleteSpecialitiesById,
+    getDoctorsBySpecialityId,
 };

@@ -94,7 +94,7 @@ router.get("/", UserController.getAllUsersFromDB);
 router.post(
   "/create-admin",
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  fileUploader.upload.single("profilePhoto"),
+  fileUploader.upload.single("file"),
   parseAndValidateAdmin,
   UserController.createAdmin
 );
@@ -102,14 +102,14 @@ router.post(
 router.post(
   "/create-doctor",
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  fileUploader.upload.single("profilePhoto"),
+  fileUploader.upload.single("file"),
   parseAndValidateDoctor,
   UserController.createDoctor
 );
 
 router.post(
   "/create-patient",
-  fileUploader.upload.single("profilePhoto"),
+  fileUploader.upload.single("file"),
   parseAndValidatePatient,
   UserController.createPatient
 );
@@ -129,7 +129,7 @@ router.get(
 router.patch(
   "/update-my-profile",
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PATIENT, UserRole.DOCTOR),
-  fileUploader.upload.single("profilePhoto"),
+  fileUploader.upload.single("file"),
   UserController.updateMyProfile
 );
 

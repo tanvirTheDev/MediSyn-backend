@@ -32,7 +32,6 @@ const deleteSpecialitiesById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const result = await SpecialitiesService.deleteSpecialitiesById(id);
-    console.log(result);
 
     res.status(200).json({
       success: true,
@@ -42,8 +41,23 @@ const deleteSpecialitiesById = catchAsync(
   }
 );
 
+const getDoctorsBySpecialityId = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const result = await SpecialitiesService.getDoctorsBySpecialityId(id);
+    console.log(result);
+
+    res.status(200).json({
+      success: true,
+      message: "Filltered Speciality Doctor successfully",
+      data: result,
+    });
+  }
+);
+
 export const SpecialitiesController = {
   createSpecialities,
   getAllSpecialities,
   deleteSpecialitiesById,
+  getDoctorsBySpecialityId,
 };

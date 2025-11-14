@@ -127,6 +127,10 @@ const getByIDFromDB = async (id) => {
         where: {
             id,
         },
+        include: {
+            doctorSchedules: true,
+            doctorSpecialities: true,
+        },
     });
     return result;
 };

@@ -5,7 +5,12 @@ import httpStatus from "http-status";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import router from "./app/routes";
 const app: Application = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());

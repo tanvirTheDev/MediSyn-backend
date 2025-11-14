@@ -49,11 +49,7 @@ router.get(
   DoctorController.getAllDoctorFromDB
 );
 
-router.get(
-  "/:id",
-  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  DoctorController.getByIDFromDB
-);
+router.get("/:id", DoctorController.getByIDFromDB);
 
 router.delete(
   "/:id",

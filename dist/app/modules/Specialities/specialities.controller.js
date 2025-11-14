@@ -27,10 +27,19 @@ const getAllSpecialities = (0, catchAsync_1.default)(async (req, res, next) => {
 const deleteSpecialitiesById = (0, catchAsync_1.default)(async (req, res, next) => {
     const { id } = req.params;
     const result = await specialities_service_1.SpecialitiesService.deleteSpecialitiesById(id);
-    console.log(result);
     res.status(200).json({
         success: true,
         message: "Deleted Speciality successfully",
+        data: result,
+    });
+});
+const getDoctorsBySpecialityId = (0, catchAsync_1.default)(async (req, res, next) => {
+    const { id } = req.params;
+    const result = await specialities_service_1.SpecialitiesService.getDoctorsBySpecialityId(id);
+    console.log(result);
+    res.status(200).json({
+        success: true,
+        message: "Filltered Speciality Doctor successfully",
         data: result,
     });
 });
@@ -38,4 +47,5 @@ exports.SpecialitiesController = {
     createSpecialities,
     getAllSpecialities,
     deleteSpecialitiesById,
+    getDoctorsBySpecialityId,
 };

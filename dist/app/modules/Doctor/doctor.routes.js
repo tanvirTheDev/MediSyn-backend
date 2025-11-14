@@ -42,6 +42,6 @@ doctor_controller_1.DoctorController.updateDoctor);
 router.get("/", 
 // auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
 doctor_controller_1.DoctorController.getAllDoctorFromDB);
-router.get("/:id", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), doctor_controller_1.DoctorController.getByIDFromDB);
+router.get("/:id", doctor_controller_1.DoctorController.getByIDFromDB);
 router.delete("/:id", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), doctor_controller_1.DoctorController.deleteFromDB);
 exports.DoctorRoutes = router;

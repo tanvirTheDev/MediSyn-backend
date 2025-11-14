@@ -70,10 +70,10 @@ const parseAndValidatePatient = (req, res, next) => {
 };
 exports.parseAndValidatePatient = parseAndValidatePatient;
 router.get("/", user_controller_1.UserController.getAllUsersFromDB);
-router.post("/create-admin", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), fileUploader_1.fileUploader.upload.single("profilePhoto"), exports.parseAndValidateAdmin, user_controller_1.UserController.createAdmin);
-router.post("/create-doctor", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), fileUploader_1.fileUploader.upload.single("profilePhoto"), exports.parseAndValidateDoctor, user_controller_1.UserController.createDoctor);
-router.post("/create-patient", fileUploader_1.fileUploader.upload.single("profilePhoto"), exports.parseAndValidatePatient, user_controller_1.UserController.createPatient);
+router.post("/create-admin", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), fileUploader_1.fileUploader.upload.single("file"), exports.parseAndValidateAdmin, user_controller_1.UserController.createAdmin);
+router.post("/create-doctor", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), fileUploader_1.fileUploader.upload.single("file"), exports.parseAndValidateDoctor, user_controller_1.UserController.createDoctor);
+router.post("/create-patient", fileUploader_1.fileUploader.upload.single("file"), exports.parseAndValidatePatient, user_controller_1.UserController.createPatient);
 router.patch("/:id/status", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN), user_controller_1.UserController.changeProfileStatus);
 router.get("/me", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN, prisma_1.UserRole.PATIENT, prisma_1.UserRole.DOCTOR), user_controller_1.UserController.getMyProfile);
-router.patch("/update-my-profile", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN, prisma_1.UserRole.PATIENT, prisma_1.UserRole.DOCTOR), fileUploader_1.fileUploader.upload.single("profilePhoto"), user_controller_1.UserController.updateMyProfile);
+router.patch("/update-my-profile", (0, auth_1.default)(prisma_1.UserRole.SUPER_ADMIN, prisma_1.UserRole.ADMIN, prisma_1.UserRole.PATIENT, prisma_1.UserRole.DOCTOR), fileUploader_1.fileUploader.upload.single("file"), user_controller_1.UserController.updateMyProfile);
 exports.UserRoutes = router;
