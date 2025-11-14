@@ -115,7 +115,9 @@ const allUserFromDB = async (
 
   console.log("doctorSchedules", doctorSchedules);
 
-  const scheduleIds = doctorSchedules.map((schedule) => schedule.scheduleId);
+  const scheduleIds = doctorSchedules.map(
+    (schedule: any) => schedule.scheduleId
+  );
   console.log("scheduleIds", scheduleIds);
 
   const result = await prisma.schedule.findMany({

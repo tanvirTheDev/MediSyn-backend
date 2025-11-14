@@ -101,7 +101,7 @@ const updateFromDB = async (
     },
   });
 
-  const result = prisma.$transaction(async (tx) => {
+  const result = prisma.$transaction(async (tx: any) => {
     // update  patient data
     const updatedPatient = await prisma.patient.update({
       where: {
@@ -163,7 +163,7 @@ const deleteFromDB = async (id: string): Promise<Patient> => {
       isDeleted: false,
     },
   });
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     // delete medical report
     await tx.medicalReport.deleteMany({
       where: {
@@ -195,7 +195,7 @@ const deleteFromDB = async (id: string): Promise<Patient> => {
 };
 
 const softDeleteFromDB = async (id: string): Promise<Patient> => {
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     const deletedPatient = tx.patient.update({
       where: {
         id,

@@ -81,7 +81,7 @@ const updateFromDB = async (id: string, data: any) => {
     where: { id },
   });
 
-  await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx: any) => {
     // Update doctor basic info
     await tx.doctor.update({
       where: { id },
@@ -153,7 +153,7 @@ const deleteFromDB = async (id: string): Promise<Doctor> => {
     where: { id },
   });
 
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     await tx.user.delete({
       where: { email: doctor.email },
     });

@@ -71,7 +71,7 @@ const getDoctorsBySpecialityId = async (specialityId: string) => {
 
   // Flatten doctors array
   const doctors = specialityWithDoctors.doctorSpecialities.map(
-    (ds) => ds.doctor
+    (ds: any) => ds.doctor
   );
 
   return doctors;

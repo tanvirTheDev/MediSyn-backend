@@ -44,7 +44,7 @@ const createAdmin = async (data: AdminData) => {
   };
 
   // 4️⃣ Transaction to create User + Admin
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     const user = await tx.user.create({
       data: userData,
     });
@@ -89,7 +89,7 @@ const createDoctor = async (data: any) => {
   };
 
   // 4️⃣ Transaction to create User + Doctor
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     const user = await tx.user.create({
       data: userData,
     });
@@ -127,7 +127,7 @@ const createPatient = async (data: CreatePatientInput): Promise<Patient> => {
     role: UserRole.PATIENT,
   };
 
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     const user = await tx.user.create({
       data: userData,
     });

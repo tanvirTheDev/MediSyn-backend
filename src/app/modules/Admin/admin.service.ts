@@ -112,7 +112,7 @@ const deleteFromDB = async (id: string): Promise<Admin> => {
       id,
     },
   });
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     const adminDataDelete = tx.admin.delete({
       where: {
         id,
@@ -134,7 +134,7 @@ const softDeleteFromDB = async (id: string): Promise<Admin> => {
   //     id,
   //   },
   // });
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx: any) => {
     const adminDataDelete = tx.admin.update({
       where: {
         id,
