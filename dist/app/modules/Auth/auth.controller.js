@@ -6,14 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const sendResponse_1 = require("../../helpers/sendResponse");
 const auth_service_1 = require("./auth.service");
 const loginUser = (0, catchAsync_1.default)(async (req, res, next) => {
     const result = await auth_service_1.AuthServices.loginUser(req.body);
     const { refreshToken } = result;
     res.cookie("refreshToken", refreshToken, {
-        secure: false,
+        secure: false, // ⚠ For production, use true
         httpOnly: true,
+        sameSite: "none", // ⚠ Depending on frontend domain
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
@@ -25,17 +28,23 @@ const loginUser = (0, catchAsync_1.default)(async (req, res, next) => {
         },
     });
 });
-const refreshToken = (0, catchAsync_1.default)(async (req, res, next) => {
-    const { refreshToken } = req.cookies;
-    if (!refreshToken) {
-        throw new Error("Refresh token is required");
+const refreshToken = (0, catchAsync_1.default)(async (req, res) => {
+    const oldRefreshToken = req.cookies.refreshToken;
+    if (!oldRefreshToken) {
+        throw new ApiError_1.default(401, "Refresh token is required");
     }
-    const result = await auth_service_1.AuthServices.refreshToken(refreshToken);
+    const { accessToken, refreshToken: newRefreshToken } = await auth_service_1.AuthServices.refreshToken(oldRefreshToken);
+    res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: true, //  set true in production
+        sameSite: "none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     (0, sendResponse_1.sendResponse)(res, {
-        statusCode: http_status_1.default.OK,
+        statusCode: 200,
         success: true,
-        message: "Refresh token Successfully",
-        data: result,
+        message: "Token refreshed successfully",
+        data: { accessToken },
     });
 });
 const changePassword = (0, catchAsync_1.default)(async (req, res, next) => {

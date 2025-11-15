@@ -81,6 +81,7 @@ const refreshToken = async (token: string) => {
   );
   return {
     accessToken,
+    refreshToken,
     needPasswordChange: userData.needPasswordChange,
   };
 };

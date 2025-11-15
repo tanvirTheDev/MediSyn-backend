@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
+import ApiError from "../../errors/ApiError";
 import { sendResponse } from "../../helpers/sendResponse";
 import { AuthServices } from "./auth.service";
 
@@ -8,8 +9,10 @@ const loginUser = catchAsync(async (req: Request, res: Response, next) => {
   const result = await AuthServices.loginUser(req.body);
   const { refreshToken } = result;
   res.cookie("refreshToken", refreshToken, {
-    secure: false,
+    secure: false, // ⚠ For production, use true
     httpOnly: true,
+    sameSite: "none", // ⚠ Depending on frontend domain
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
   sendResponse(res, {
@@ -23,18 +26,28 @@ const loginUser = catchAsync(async (req: Request, res: Response, next) => {
   });
 });
 
-const refreshToken = catchAsync(async (req: Request, res: Response, next) => {
-  const { refreshToken } = req.cookies;
-  if (!refreshToken) {
-    throw new Error("Refresh token is required");
+const refreshToken = catchAsync(async (req, res) => {
+  const oldRefreshToken = req.cookies.refreshToken;
+
+  if (!oldRefreshToken) {
+    throw new ApiError(401, "Refresh token is required");
   }
-  const result = await AuthServices.refreshToken(refreshToken);
+
+  const { accessToken, refreshToken: newRefreshToken } =
+    await AuthServices.refreshToken(oldRefreshToken);
+
+  res.cookie("refreshToken", newRefreshToken, {
+    httpOnly: true,
+    secure: true, //  set true in production
+    sameSite: "none",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: 200,
     success: true,
-    message: "Refresh token Successfully",
-    data: result,
+    message: "Token refreshed successfully",
+    data: { accessToken },
   });
 });
 

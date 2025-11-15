@@ -62,6 +62,7 @@ const refreshToken = async (token) => {
     }, config_1.default.jwt.jwt_secret, config_1.default.jwt.jwt_expires_in);
     return {
         accessToken,
+        refreshToken,
         needPasswordChange: userData.needPasswordChange,
     };
 };
