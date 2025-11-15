@@ -7,7 +7,9 @@ exports.DoctorRoutes = void 0;
 // user.routes.ts
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
+const fileUploader_1 = require("../../helpers/fileUploader");
 const auth_1 = __importDefault(require("../../middlewares/auth"));
+const user_routes_1 = require("../User/user.routes");
 const doctor_controller_1 = require("./doctor.controller");
 // import { UserController } from "./user.controller";
 const router = express_1.default.Router();
@@ -34,11 +36,7 @@ const router = express_1.default.Router();
 //     next(error);
 //   }
 // };
-router.patch("/:id", 
-// auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-// fileUploader.upload.single("profilePhoto"),
-//   parseAndValidateAdmin,
-doctor_controller_1.DoctorController.updateDoctor);
+router.patch("/:id", (0, auth_1.default)(client_1.UserRole.SUPER_ADMIN, client_1.UserRole.ADMIN), fileUploader_1.fileUploader.upload.single("profilePhoto"), user_routes_1.parseAndValidateAdmin, doctor_controller_1.DoctorController.updateDoctor);
 router.get("/", 
 // auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
 doctor_controller_1.DoctorController.getAllDoctorFromDB);
