@@ -64,6 +64,7 @@ const refreshToken = async (token: string) => {
   } catch (error) {
     throw new Error("Invalid refresh token");
   }
+
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       email: decodeData.email,
@@ -71,6 +72,7 @@ const refreshToken = async (token: string) => {
     },
   });
 
+  // Generate new access token
   const accessToken = jwtHelpers.generateToken(
     {
       email: userData.email,
@@ -79,9 +81,20 @@ const refreshToken = async (token: string) => {
     config.jwt.jwt_secret as Secret,
     config.jwt.jwt_expires_in as string
   );
+
+  // Generate new refresh token
+  const newRefreshToken = jwtHelpers.generateToken(
+    {
+      email: userData.email,
+      role: userData.role,
+    },
+    config.jwt.refresh_token_secret as Secret,
+    config.jwt.refresh_token_expires_in as string
+  );
+
   return {
     accessToken,
-    refreshToken,
+    refreshToken: newRefreshToken,
     needPasswordChange: userData.needPasswordChange,
   };
 };

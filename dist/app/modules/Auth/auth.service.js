@@ -56,13 +56,19 @@ const refreshToken = async (token) => {
             status: client_1.UserStatus.ACTIVE,
         },
     });
+    // Generate new access token
     const accessToken = jwtHelpers_1.jwtHelpers.generateToken({
         email: userData.email,
         role: userData.role,
     }, config_1.default.jwt.jwt_secret, config_1.default.jwt.jwt_expires_in);
+    // Generate new refresh token
+    const newRefreshToken = jwtHelpers_1.jwtHelpers.generateToken({
+        email: userData.email,
+        role: userData.role,
+    }, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
     return {
         accessToken,
-        refreshToken,
+        refreshToken: newRefreshToken,
         needPasswordChange: userData.needPasswordChange,
     };
 };

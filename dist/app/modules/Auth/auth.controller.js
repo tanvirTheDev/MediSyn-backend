@@ -36,7 +36,7 @@ const refreshToken = (0, catchAsync_1.default)(async (req, res) => {
     const { accessToken, refreshToken: newRefreshToken } = await auth_service_1.AuthServices.refreshToken(oldRefreshToken);
     res.cookie("refreshToken", newRefreshToken, {
         httpOnly: true,
-        secure: true, //  set true in production
+        secure: true,
         sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
