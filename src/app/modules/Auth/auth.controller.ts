@@ -9,10 +9,10 @@ const loginUser = catchAsync(async (req: Request, res: Response, next) => {
   const result = await AuthServices.loginUser(req.body);
   const { refreshToken } = result;
   res.cookie("refreshToken", refreshToken, {
-    secure: false, // ⚠ For production, use true
+    secure: true,
     httpOnly: true,
-    sameSite: "none", // ⚠ Depending on frontend domain
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    sameSite: "none",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   sendResponse(res, {
