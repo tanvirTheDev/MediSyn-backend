@@ -12,7 +12,6 @@ const createAdmin = z.object({
     contactNumber: z.string().nonempty("Contact Number is required"),
   }),
 });
-
 export const createDoctor = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string(),
