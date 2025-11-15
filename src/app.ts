@@ -7,7 +7,18 @@ import router from "./app/routes";
 const app: Application = express();
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://medi-sync-lake.vercel.app"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:3000",
+        "https://medi-sync-lake.vercel.app",
+      ];
+      if (!origin) return callback(null, true); // allow non-browser requests like Postman
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
