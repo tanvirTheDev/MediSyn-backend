@@ -7,7 +7,7 @@ import router from "./app/routes";
 const app: Application = express();
 app.use(
   cors({
-    origin: "https://medi-sync-lake.vercel.app",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );

@@ -3,7 +3,6 @@ import { UserRole } from "@prisma/client";
 import express, { Router } from "express";
 import { fileUploader } from "../../helpers/fileUploader";
 import auth from "../../middlewares/auth";
-import { parseAndValidateAdmin } from "../User/user.routes";
 import { DoctorController } from "./doctor.controller";
 // import { UserController } from "./user.controller";
 
@@ -39,9 +38,9 @@ const router = express.Router();
 
 router.patch(
   "/:id",
-  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.DOCTOR),
   fileUploader.upload.single("profilePhoto"),
-  parseAndValidateAdmin,
+  // parseAndValidateAdmin,
   DoctorController.updateDoctor
 );
 

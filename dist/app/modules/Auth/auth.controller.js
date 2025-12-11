@@ -13,10 +13,10 @@ const loginUser = (0, catchAsync_1.default)(async (req, res, next) => {
     const result = await auth_service_1.AuthServices.loginUser(req.body);
     const { refreshToken } = result;
     res.cookie("refreshToken", refreshToken, {
-        secure: false, // ⚠ For production, use true
+        secure: true,
         httpOnly: true,
-        sameSite: "none", // ⚠ Depending on frontend domain
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        sameSite: "none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
